@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { ICountry } from "../models/country.model";
+import React from 'react'
+import styled from 'styled-components'
+import { ICountry } from '../models/country.model'
 
 const CountryStyled = styled.div`
   border-radius: 5px;
@@ -27,7 +27,7 @@ const CountryStyled = styled.div`
     font-size: 0.9em;
     margin-bottom: 0.5rem;
   }
-`;
+`
 
 const Country = (props: ICountry) => {
   return (
@@ -49,7 +49,7 @@ const Country = (props: ICountry) => {
         </p>
       </div>
     </CountryStyled>
-  );
-};
+  )
+}
 
-export default Country;
+export default Country

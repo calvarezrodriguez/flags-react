@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Country from './country'
 import { useSelector, useDispatch } from 'react-redux'
@@ -14,17 +14,26 @@ const CountryListStyled = styled.div`
 
 const CountryList = () => {
   const dispatch = useDispatch()
-  // ESTADO LOCAL QUE ACTUALIZA INPUT
-  const [inputValue, setInputValue] = useState('')
-  // OBTENGO LISTA ORDENADA EN CASO DE QUE SE ESTE UTILIZANDO EL FILTRO
+  // OBTENGO LISTA DE PAISES BUSCADOS POR NOMBRE DEL ESTADO GENERAL
+  const countryListByName = useSelector((state: IState) => state.countryListByName)
+  // OBTENGO LISTA FILTRADA POR NOMBRE O REGION
   const countryList = useSelector((state: IState) => {
-    if (state.filterByRegion !== '') {
+    if (state.filterByRegion !== '' && countryListByName.length === 0) {
       return state.coutryFilteredByRegion
+    }
+    if (countryListByName.length > 0) {
+      return countryListByName
     }
     return state.countryList
   })
-  // OBTENGO LISTA DE PAISES BUSCADOS POR NOMBRE DEL ESTADO GENERAL
-  const countryListByName = useSelector((state: IState) => state.countryListByName)
+
+  // DESPACHA ACCION CUANDO SE REGISTRAN CAMBIOS EN EL INPUT
+  const readAPI = (list: Response) => {
+    dispatch({
+      type: 'SET_COUNTRY_LIST',
+      payload: list,
+    })
+  }
 
   useEffect(() => {
     fetch('https://restcountries.eu/rest/v2/all')
@@ -40,53 +49,12 @@ const CountryList = () => {
       })
   })
 
-  // DESPACHA ACCION CUANDO SE REGISTRAN CAMBIOS EN EL INPUT
-  const readAPI = (list: Response) => {
-    dispatch({
-      type: 'SET_COUNTRY_LIST',
-      payload: list,
-    })
-  }
-
-  // DESPACHA ACCION CUANDO SE REGISTRAN CAMBIOS EN EL INPUT
-  const filterByName = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
-    dispatch({
-      type: 'SET_COUNTRY_BY_NAME',
-      payload: event.target.value,
-    })
-  }
-
-  // DESPACHA ACCION QUE LIMPIA INPUT
-  const clearInput = () => {
-    dispatch({
-      type: 'SET_COUNTRY_BY_NAME',
-      payload: '',
-    })
-    setInputValue('')
-  }
-
   return (
     <CountryListStyled>
-      <input type="text" value={inputValue} onChange={filterByName} />
-
-      {inputValue && <button onClick={clearInput}>X</button>}
-
-      {/* SI LA LISTA DE PAISES ESTA VACÍA, SE MUESTRA BUSQUEDA Y SE INDICA QUE NO SE HA ENCONTRADO */}
-      {countryListByName.length === 0 && inputValue && (
-        <p>
-          <strong>{inputValue}</strong> Not found in countries
-        </p>
-      )}
-
-      {/* SI NO SE HA BUSCADO NADA, SE MUESTRA COUNTRYLIST, SINO SE MUESTRA BUSQUEDA POR NOMBRE */}
-      {(countryListByName.length > 0 ? countryListByName : countryList).map(
-        ({ name, flag, population, capital, region }) => {
-          return (
-            <Country capital={capital} flag={flag} key={name} name={name} population={population} region={region} />
-          )
-        }
-      )}
+      {/* DESPLIEGA LA LISTA DE PAISES */}
+      {countryList.map(({ name, flag, population, capital, region }) => {
+        return <Country capital={capital} flag={flag} key={name} name={name} population={population} region={region} />
+      })}
     </CountryListStyled>
   )
 }

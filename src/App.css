@@ -1,3 +1,18 @@
+html {
+  font-size: 16px;
+}
+
+:root {
+  --black: #111517;
+  --white: white;
+  --background: #fafafa;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  color: var(--black);
+}
+
 .App {
   text-align: center;
 }
@@ -32,6 +47,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

@@ -18,16 +18,14 @@ const reducer = (state = initialState, action: any) => {
 
     // ALMACENA TODOS LOS PAISES POR NOMBRE EN COUNTRYLISTBYNAME DETNRO DEL STATE
     case 'SET_COUNTRY_BY_NAME': {
-      let list
-      if (state.filterByRegion !== '') {
-        list = state.coutryFilteredByRegion
-      } else {
-        list = state.countryList
+      const result = () => {
+        let list
+        state.filterByRegion !== '' ? (list = state.coutryFilteredByRegion) : (list = state.countryList)
+        return action.payload === ''
+          ? []
+          : list.filter((country: ICountry) => country.name.toLowerCase().includes(action.payload.toLowerCase()))
       }
-      // FILTRO LISTA DE PAISES QUE HAGAN MATCH CON CARACTERES
-      const countryListByName = list.filter((country: ICountry) =>
-        country.name.toLowerCase().includes(action.payload.toLowerCase())
-      )
+      const countryListByName = result()
       return { ...state, countryListByName }
     }
 

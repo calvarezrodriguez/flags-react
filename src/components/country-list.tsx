@@ -3,13 +3,18 @@ import styled from 'styled-components'
 import Country from './country'
 import { useSelector, useDispatch } from 'react-redux'
 import { IState } from '../models/state.model'
+import Wrapper from './wrapper'
 
 const CountryListStyled = styled.div`
   background: var(--background);
   display: grid;
+  grid-auto-flow: columns;
+  grid-column-gap: 75px;
   grid-row-gap: 2.3em;
+  grid-template-columns: repeat(auto-fill, minMax(0, 270px));
   justify-content: center;
-  padding: 4em 2em;
+  justify-items: space-between;
+  padding: 3em 0;
 `
 
 const CountryList = () => {
@@ -18,12 +23,10 @@ const CountryList = () => {
   const countryListByName = useSelector((state: IState) => state.countryListByName)
   // OBTENGO LISTA FILTRADA POR NOMBRE O REGION
   const countryList = useSelector((state: IState) => {
-    if (state.filterByRegion !== '' && countryListByName.length === 0) {
-      return state.coutryFilteredByRegion
-    }
-    if (countryListByName.length > 0) {
-      return countryListByName
-    }
+    if (state.filterByRegion !== '' && countryListByName.length === 0) return state.coutryFilteredByRegion
+
+    if (countryListByName.length > 0) return countryListByName
+
     return state.countryList
   })
 
@@ -50,12 +53,16 @@ const CountryList = () => {
   })
 
   return (
-    <CountryListStyled>
-      {/* DESPLIEGA LA LISTA DE PAISES */}
-      {countryList.map(({ name, flag, population, capital, region }) => {
-        return <Country capital={capital} flag={flag} key={name} name={name} population={population} region={region} />
-      })}
-    </CountryListStyled>
+    <Wrapper>
+      <CountryListStyled>
+        {/* DESPLIEGA LA LISTA DE PAISES */}
+        {countryList.map(({ name, flag, population, capital, region }) => {
+          return (
+            <Country capital={capital} flag={flag} key={name} name={name} population={population} region={region} />
+          )
+        })}
+      </CountryListStyled>
+    </Wrapper>
   )
 }
 

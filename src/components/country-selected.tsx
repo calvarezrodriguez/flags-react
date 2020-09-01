@@ -48,6 +48,7 @@ const CountrySelectedStyled = styled.div`
       margin-top: 3em;
     }
     img {
+      object-fit: cover;
       max-height: 363px;
     }
   }

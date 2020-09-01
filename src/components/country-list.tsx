@@ -36,16 +36,26 @@ const CountryList = () => {
   }
 
   useEffect(() => {
-    fetch('https://restcountries.eu/rest/v2/all')
-      .then(response => {
-        return response.json()
-      })
-      .then(list => {
+    let isCancelled = false
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://restcountries.eu/rest/v2/all')
+
+        if (!response.ok && !isCancelled) {
+          throw new Error(`${response.status} ${response.statusText}`)
+        }
+
+        const list = await response.json()
+
         readAPI(list)
-      })
-      .catch(() => {
-        console.log('Hubo algún error en la lectura de la api')
-      })
+      } catch (e) {
+        if (!isCancelled) return console.log(`ERROR: Can't read data from API`)
+      }
+    }
+    fetchData()
+    return () => {
+      isCancelled = true
+    }
   })
 
   return (

@@ -34,14 +34,27 @@ const CountryPage = ({ match, history }: any) => {
   )
   const [country, setCountry] = useState(selectedCountry)
   useEffect(() => {
-    if (!selectedCountry) {
-      fetch(`https://restcountries.eu/rest/v2/name/${match.params.id}`)
-        .then((response: any) => {
-          return response.json()
-        })
-        .then((data: any) => {
+    let isCancelled = false
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://restcountries.eu/rest/v2/name/${match.params.id}`)
+
+        if (!response.ok && !isCancelled) {
+          throw new Error(`${response.status} ${response.statusText}`)
+        }
+
+        const data = await response.json()
+
+        if (data[0] !== undefined) {
           setCountry(data[0])
-        })
+        }
+      } catch (e) {
+        if (!isCancelled) return `ERROR: Problem to obtain contry`
+      }
+    }
+    fetchData()
+    return () => {
+      isCancelled = true
     }
   }, [selectedCountry, match.params.id])
 

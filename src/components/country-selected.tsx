@@ -47,12 +47,13 @@ const CountrySelectedStyled = styled.div`
       margin-right: 1em;
       margin-top: 3em;
     }
+    img {
+      max-height: 363px;
+    }
   }
 `
 
 const CountrySelected = ({ ...selectedCountry }: any) => {
-  console.log(selectedCountry)
-  const iso = require('iso-3166-1')
   return (
     <CountrySelectedStyled>
       <img src={selectedCountry.flag} alt="" />
@@ -88,29 +89,40 @@ const CountrySelected = ({ ...selectedCountry }: any) => {
             </p>
             <p>
               <strong>Currencies: </strong>
-              {selectedCountry.currencies.map((currency: any) => {
-                console.log(currency.name)
-                return <span key={currency.name}>{currency.name}</span>
-              })}
+              {selectedCountry.currencies ? (
+                selectedCountry.currencies.map((currency: any) => {
+                  return <span key={currency.name}>{currency.name}</span>
+                })
+              ) : (
+                <span />
+              )}
             </p>
             <p className="languages">
               <strong>Languages: </strong>
-              {selectedCountry.languages.map((language: any) => {
-                return <span>{language.name}</span>
-              })}
+              {selectedCountry.languages ? (
+                selectedCountry.languages.map((language: any) => {
+                  return <span key={language.name}>{language.name}</span>
+                })
+              ) : (
+                <span />
+              )}
             </p>
           </div>
         </div>
         <p className="borders">
           <strong>Borders Countries: </strong>
         </p>
-        {selectedCountry.borders.map((border: any) => {
-          return (
-            <span key={border} className="border">
-              {iso.whereAlpha3(border).country}
-            </span>
-          )
-        })}
+        {selectedCountry.borders ? (
+          selectedCountry.borders.map((border: any) => {
+            return (
+              <span key={border} className="border">
+                {border}
+              </span>
+            )
+          })
+        ) : (
+          <span />
+        )}
       </div>
     </CountrySelectedStyled>
   )

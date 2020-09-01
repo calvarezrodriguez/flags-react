@@ -29,7 +29,6 @@ function AppRouter() {
 
   return (
     <main className={mainClass}>
-      {/* PROVIDER RECIBE STATE Y ALMACENA */}
       <Provider store={store}>
         <Router>
           <Header setDarkMode={setDarkMode} darkMode={darkMode} />

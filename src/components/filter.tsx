@@ -12,8 +12,6 @@ const FilterStyled = styled.select`
   outline: 0;
   padding: 1.3em;
 `
-
-// FUNCION QUE DEFINE EL CUERPO DE LA ACCION
 const filterByRegionAction = (regionSelected: String) => {
   return {
     type: 'FILTER_BY_REGION',
@@ -22,18 +20,13 @@ const filterByRegionAction = (regionSelected: String) => {
 }
 
 export const FilterByRegion = () => {
-  // DESPACAHA ACCIONES
   const dispatch = useDispatch()
-  // RECUPERA ESTADO ACTUAL DE LA ACCION
   const filterByRegion = useSelector((state: IState) => state.filterByRegion)
-  // RECIBE ELEMENTO DESDE SELECT
   const onRegionChange = (selectEvent: ChangeEvent<HTMLSelectElement>) => {
     const value = selectEvent.target.value
-    // CONSTRUYO ACCION
     dispatch(filterByRegionAction(value))
   }
   return (
-    // CAPTA CAMBIO Y ENVIA A FUNCION
     <FilterStyled onChange={onRegionChange} value={filterByRegion}>
       <option value="">Filter by region</option>
       <option value="Africa">Africa</option>

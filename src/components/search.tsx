@@ -24,11 +24,9 @@ const SearchStyled = styled.div`
 
 const Search = () => {
   const dispatch = useDispatch()
-  // ESTADO LOCAL QUE ACTUALIZA INPUT
   const [inputValue, setInputValue] = useState('')
   const countryListByName = useSelector((state: IState) => state.countryListByName)
 
-  // DESPACHA ACCION CUANDO SE REGISTRAN CAMBIOS EN EL INPUT
   const filterByName = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
     dispatch({
@@ -37,7 +35,6 @@ const Search = () => {
     })
   }
 
-  // DESPACHA ACCION QUE LIMPIA INPUT
   const clearInput = () => {
     dispatch({
       type: 'SET_COUNTRY_BY_NAME',

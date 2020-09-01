@@ -19,9 +19,7 @@ const CountryListStyled = styled.div`
 
 const CountryList = () => {
   const dispatch = useDispatch()
-  // OBTENGO LISTA DE PAISES BUSCADOS POR NOMBRE DEL ESTADO GENERAL
   const countryListByName = useSelector((state: IState) => state.countryListByName)
-  // OBTENGO LISTA FILTRADA POR NOMBRE O REGION
   const countryList = useSelector((state: IState) => {
     if (state.filterByRegion !== '' && countryListByName.length === 0) return state.coutryFilteredByRegion
 
@@ -30,7 +28,6 @@ const CountryList = () => {
     return state.countryList
   })
 
-  // DESPACHA ACCION CUANDO SE REGISTRAN CAMBIOS EN EL INPUT
   const readAPI = (list: Response) => {
     dispatch({
       type: 'SET_COUNTRY_LIST',
@@ -44,7 +41,6 @@ const CountryList = () => {
         return response.json()
       })
       .then(list => {
-        // ENVIA LECTURA AL ESTADO PRINCIPAL
         readAPI(list)
       })
       .catch(() => {
@@ -55,7 +51,6 @@ const CountryList = () => {
   return (
     <Wrapper>
       <CountryListStyled>
-        {/* DESPLIEGA LA LISTA DE PAISES */}
         {countryList.map(({ name, flag, population, capital, region }) => {
           return (
             <Country capital={capital} flag={flag} key={name} name={name} population={population} region={region} />
